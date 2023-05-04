@@ -1,20 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+
 package sistemadegrafos;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 /**
  *
  * @author lucas
  */
 public class main {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws FileNotFoundException, IOException {
+        File arquivo = new File("C:\\Teste\\Configuracao\\config.txt");
+        Scanner scan = new Scanner(arquivo);
+        while(scan.hasNextLine()){
+            String caminho[] = scan.nextLine().split("=");
+            File pastas = new File(caminho[1]);
+            boolean pasta = pastas.mkdirs();
+            if(pasta){
+                System.out.println("Pasta Criada");
+            }else{
+                System.out.println("Nao foi possivel criar pasta");
+            }
+        }
     }
     
 }
