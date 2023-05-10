@@ -1,5 +1,5 @@
 
-package sistemadegrafos;
+package Control;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class criarArquivoRota {
     public void ciar() {
 //        try {
-//            Stream<Path> paths = Files.walk(Paths.get("/home/folder/src"));;;
+//            Stream<Path> paths = Files.walk(Paths.get("c://confi.txt"));
 //            System.out.println(paths);
 //        } catch (IOException ex) {
 //            Logger.getLogger(criarArquivoRota.class.getName()).log(Level.SEVERE, null, ex);
