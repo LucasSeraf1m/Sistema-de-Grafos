@@ -25,6 +25,9 @@ public class main {
                 System.out.println("Nao foi possivel criar pasta");
             }
         }
+        
+        criarArquivoRota criarRota = new criarArquivoRota();
+        criarRota.ciar();
+        
     }
-    
 }
