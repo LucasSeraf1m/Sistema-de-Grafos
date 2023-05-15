@@ -6,18 +6,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class criarArquivoRota {
     public void criar(Rota rota) {
-//        try {
-//            Stream<Path> paths = Files.walk(Paths.get("c://confi.txt"));
-//            System.out.println(paths);
-//        } catch (IOException ex) {
-//            Logger.getLogger(criarArquivoRota.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        int numRotaArquivo = pegarNumeracaoDasRotas() +1;
+        int numRotaArquivo = pegarUltimaRotaCriada() +1;
         System.out.println(numRotaArquivo);
         String numRString = "";
         if(numRotaArquivo <10) {
@@ -28,49 +20,104 @@ public class criarArquivoRota {
 
         try {
             FileWriter arquivoRota = new FileWriter("C:\\Teste\\rota"+numRString+".txt");
+            
             arquivoRota.write(rota.getHeader());
             arquivoRota.write('\n');
-            ArrayList listaRotas = rota.getListaRota();
+            
+            ArrayList listaRotas = rota.getResumoConexoes();
             for(Object i: listaRotas) {
                 arquivoRota.write(i.toString());
                 arquivoRota.write('\n');
-                
             }
+            
+            ArrayList listaPesos = rota.getResumoPesos();
+            for(Object i: listaPesos) {
+                arquivoRota.write(i.toString());
+                arquivoRota.write('\n');
+            }
+            
+            arquivoRota.write(rota.getTrailer());
+            arquivoRota.write('\n');
+            
             arquivoRota.close();
         } catch(IOException erro) {
             System.out.println(erro);
         }
     }
     
-    public void testeRota() {
-        criarArquivoRota criarRota = new criarArquivoRota();
-        Rota rota = new Rota();
-        ArrayList listaRotas = new ArrayList();
-        listaRotas.add("010001=01");
-        listaRotas.add("010001=02");
-        rota.setHeader("0002448");
-        rota.setListaRota(listaRotas);
-        criarRota.criar(rota);
-    }
-    
-    public int pegarNumeracaoDasRotas() {
-        File folder = new File("C:\\Teste");
-
-        int ultNumero = 0;
+    // Funções para pegar ultimo arquivo de rotas
+    public int pegarUltimaRotaCriada() {
+        int ultNumero=0, rota;
         
-        for (File file : folder.listFiles()) {
-                if (!file.isDirectory()) {
-                    String nome = file.getName();
-                    nome = nome.replace(".", "");
-                    nome = nome.replace("txt", "");
-                    nome = nome.replace("rota", "");
-                    if(ultNumero < Integer.parseInt(nome)) {
-                        ultNumero = Integer.parseInt(nome);
-                    }
-                        
-                } 
+        rota = verificarUltimaRota("C:\\Teste");
+        if(ultNumero<rota) {
+            ultNumero = rota;
+        }
+        
+        
+        rota = pegarUltimaRotaCriadaProcessado();
+        if(ultNumero<rota) {
+            ultNumero = rota;
+        }
+        
+        rota = pegarUltimaRotaCriadaNaoProcessado();
+        if(ultNumero<rota) {
+            ultNumero = rota;
         }
         
         return ultNumero;
+    }
+    
+    public int pegarUltimaRotaCriadaProcessado() {
+        int ultNumero;
+        ultNumero = verificarUltimaRota("C:\\Teste\\Processado");
+        return ultNumero;
+    }
+    
+    public int pegarUltimaRotaCriadaNaoProcessado() {
+        int ultNumero;
+        ultNumero = verificarUltimaRota("C:\\Teste\\NaoProcessado");
+        return ultNumero;
+    }
+    
+    public int verificarUltimaRota(String rota) {
+        File folder = new File(rota);
+        int ultNumero = 0;
+        
+        for (File file : folder.listFiles()) {
+            if (!file.isDirectory()) {
+                String nome = file.getName();
+                //Tratamento do  nome do arquivo para pegar o número
+                nome = nome.replace(".", "");
+                nome = nome.replace("txt", "");
+                nome = nome.replace("rota", "");
+                if(ultNumero < Integer.parseInt(nome)) {
+                    ultNumero = Integer.parseInt(nome);
+                }  
+            } 
+        }
+        
+        return ultNumero;
+    }
+            
+           
+    // Função para teste
+    public void testeRota() {
+        criarArquivoRota criarRota = new criarArquivoRota();
+        Rota rota = new Rota();
+        rota.setHeader("0002448");              //Cria o cabeçalho
+        
+        ArrayList resumoConexoes = new ArrayList();   //Cria as arestas
+        resumoConexoes.add("010001=01");
+        resumoConexoes.add("010001=02");
+        rota.setResumoConexoes(resumoConexoes);
+        
+        ArrayList resumoPesos = new ArrayList();   //Cria as arestas
+        resumoPesos.add("020001=01");
+        resumoPesos.add("020001=02");
+        rota.setResumoPesos(resumoPesos);
+        
+        rota.setTrailer("202304");          //Criado o trailer
+        criarRota.criar(rota);
     }
 }
