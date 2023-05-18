@@ -69,7 +69,7 @@ public class main {
             arlRota.add(scanRota.nextLine());
         }
         Rotas veriRota = new Rotas();
-        int x = veriRota.verificaHeader(arlRota);
+        int x = veriRota.verificacao(arlRota);
         switch(x){
             case 0: //mover pra pasta de processado;
                     break;
