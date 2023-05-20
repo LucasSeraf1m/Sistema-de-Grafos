@@ -51,7 +51,6 @@ public class Grafo {
 	 * 	O custo entre os dois vertices.
 	 */
 	public int getCusto(final int noOrigem, final int noDestino) {
-		
 		int custo = 0;
 		if (noOrigem > vertices.length) {
 			throw new ArrayIndexOutOfBoundsException("No origem ["+noOrigem+"] n�o existe no grafo");
@@ -77,7 +76,6 @@ public class Grafo {
 	}
 	
 	public int getMaisProximo(final int listaCusto[], final Set<Integer> listaNaoVisitados) {
-		
 		double minDistancia = Integer.MAX_VALUE;
 		int noProximo = 0;
 		for (Integer i : listaNaoVisitados) {
@@ -91,8 +89,7 @@ public class Grafo {
 	
 	
 	
-	public List<Integer> caminhoMinimo(final int noOrigem, final int noDestino) {
-		
+	public List<Integer> caminhoMinimo(final int noOrigem, final int noDestino) {	
 		// Variaveis de controle.
 		int custo[] = new int[vertices.length];
 		int antecessor[] = new int[vertices.length];
@@ -152,7 +149,6 @@ public class Grafo {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
 		Grafo g = new Grafo(5);
 		
 		try {
@@ -167,5 +163,4 @@ public class Grafo {
 			e.printStackTrace();
 		}
 	}
-
 }

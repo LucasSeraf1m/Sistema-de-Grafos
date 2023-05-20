@@ -48,13 +48,10 @@ public class Principal {
 			}
 			catch (Exception e) {
 				System.out.println("Digite uma estação válida. Opções: 1 a 20");
-			}
-			
+			}	
 		}
 	}
-	
-	
-	
+        
 	public static void main(String[] args) throws InvalidAlgorithmParameterException {
 		
 		Grafo metro = new Grafo(20);
