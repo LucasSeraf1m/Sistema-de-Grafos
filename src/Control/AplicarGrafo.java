@@ -1,86 +1,82 @@
 
 package Control;
 
-import Model.ConexaoEPeso;
-import Model.Rota;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.security.InvalidAlgorithmParameterException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sistemadegrafos.Grafo;
 
 public class AplicarGrafo {
-    private Grafo grafo = new Grafo(20);
-    Rota rota = new Rota();
-    private ArrayList resumoConexoes = new ArrayList<String>();
-    private ArrayList resumoPesos = new ArrayList<String>();
-    private String trailer;
+    private Grafo grafo;
     
-    public void criarLigações(String caminho) throws InvalidAlgorithmParameterException {
+    public Grafo criarLigações(String caminho) throws InvalidAlgorithmParameterException {
         try {
-            ConexaoEPeso cp = new ConexaoEPeso();
-            ArrayList<ConexaoEPeso> cpList = new ArrayList<>();
-            File arquivo = new File("C:\\Teste\\rota01.txt");
+            File arquivo = new File(caminho);
             Scanner scan;
             scan = new Scanner(arquivo);
+            
+            int numGrafo = getNumDeVerticesRota(caminho);
+            grafo = new Grafo(numGrafo);
             
             while(scan.hasNextLine()){
                 String linha = scan.nextLine();
 //               Le as linhas dos nós de origem e destino e as separa
-                String vertices[] = linha.split("="); // Separa o nó de origem e destino ou as conexões dos pesos
-                int validacao = vertices[0].charAt(1);//Tratamento para pegar apenas o numero indicador dos blocos conexões
+                String verticesEPeso[] = linha.split("="); // Separa o nó de origem e destino dos pesos
+                int validacao = verticesEPeso[0].charAt(1);//Tratamento para pegar apenas o numero indicador dos blocos conexões
                 //Tratamento para pegar apenas o numero indicador dos blocos conexões
-                if(validacao == 49){//Se for o número 1 então...
+                if(validacao == 50){//Se for o número 1 então...
                     // Armazena os nos de origem e destino em variaveis
-                    cp.setNoOrigem(retirarIndicador(vertices[0])); // Retorna a rota origem sem o indice
-                    cp.setNoDestino(Integer.parseInt(vertices[1]));
-                    cp.setPeso(0);
-                    cpList.add(cp);
-                }
-                //Verificar quais os pesos das conexoes e armaxenar em variaveis
-                if(validacao == 50) {
-                    int peso= Integer.parseInt(vertices[1]);
-                    String conexao[] = vertices[0].split(";");
-                    int noOrigem = retirarIndicador(conexao[0]);
-                    int noDestino= Integer.parseInt(conexao[1]);
+                    String conexao[] = verticesEPeso[0].split(";"); // Retorna a rota origem sem o indice
+                    conexao[0] = conexao[0].substring(1); //Apaga a primeira casa do string, nesse caso o 0
+                    conexao[0] = conexao[0].substring(1); //Apaga novamente a primeira casa do string, nesse caso o 1 ou 2
+                    int noOrigem = Integer.parseInt(conexao[0]);
+                    int noDestino = Integer.parseInt(conexao[1]);
+                    int peso = Integer.parseInt(verticesEPeso[1]);
                     
-                    
-                    
+                    grafo.criaAresta(noOrigem, noDestino, peso);
                 }
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AplicarGrafo.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-    }
-
-    //Tratamento para retirar o valor do indentificador
-    private int retirarIndicador(String noComIdentificador) {
-        int noOrigem=0;
-        noComIdentificador = noComIdentificador.substring(1); //Apaga a primeira casa do string, nesse caso o 0
-        noOrigem = Integer.parseInt(noComIdentificador.substring(1)); //Apaga novamente a primeira casa do string, nesse caso o 1 ou 2
+        }    
         
-        return noOrigem;
+        return grafo;
     }
     
-    public Grafo getGrafo() {
-        return grafo;
+    private int getNumDeVerticesRota(String caminho) {
+        int totalDeVertices=0;
+        
+        try {
+            List<String> linhas;
+            linhas = Files.readAllLines(new File(caminho).toPath());
+            String ultimaLinha = linhas.get(linhas.size() - 1);
+            String valores[];
+            valores = ultimaLinha.split(";");
+            totalDeVertices = Integer.parseInt(valores[0].substring(2));
+            
+        } catch (IOException ex) {
+            Logger.getLogger(AplicarGrafo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return totalDeVertices;
     }
     
     //Teste do AplicarGrafo
     public static void main(String[] args) {
         AplicarGrafo appRota = new AplicarGrafo();
-        Grafo g = new Grafo(20);
+        
         try {
-            appRota.criarLigações("");
-            g = appRota.getGrafo();
-            
+            Grafo g = appRota.criarLigações("C:\\Teste\\rota01.txt");
+//            appRota.getNumDeVerticesRota("C:\\Teste\\rota01.txt");
             System.out.println(g.caminhoMinimo(1, 3));
 			
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
                 e.printStackTrace();
         }
     }

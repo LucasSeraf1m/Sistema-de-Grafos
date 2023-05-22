@@ -1,0 +1,105 @@
+
+package Control;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+public class ConfiguracaoPastas {
+    private String caminhoTeste="";
+    private String caminhoProcessado="";
+    private String caminhoNaoProcessado="";
+    
+    public void criarArquivoConfig() {
+        String caminhoConf = caminhoTeste + "/Configuracao";
+        System.out.println(caminhoTeste);
+        System.out.println(caminhoNaoProcessado);
+        System.out.println(caminhoProcessado);
+        verificarCriarPasta(caminhoConf);
+        try {
+            FileWriter conf = new FileWriter(caminhoConf+"/config.txt");
+            conf.write("Processado="+caminhoProcessado);
+            conf.write("\n");
+            conf.write("Processado="+caminhoNaoProcessado);
+            conf.write("\n");
+            conf.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ConfiguracaoPastas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    //Cria a pasta c:\teste\...
+    public void criarPastaPadrao() {
+        //Verifica se não existe pasta criada
+        verificarCriarPasta("c:\\Teste\\");
+        verificarCriarPasta("c:\\Teste\\NaoProcessado");
+        verificarCriarPasta("c:\\Teste\\Processado");
+    }
+    
+    //Criar pasta em outro lugar com mesma estrutura
+    public void criarPastaPadraoB(String caminho) {
+//        Verifica se não existe pasta criada
+        verificarCriarPasta(caminho + "Teste\\");
+        verificarCriarPasta(caminho + "Teste\\Processado");
+        verificarCriarPasta(caminho + "Teste\\NaoProcessado");
+    }
+    
+    public void verificarCriarPasta(String caminho) {
+       boolean existencia = verificarExistenciaPasta(caminho);
+       if(!existencia) {
+            //Criar pasta nova
+            criarPasta(caminho);
+       }    
+    }
+    
+    //Verifica se não existe pasta criada
+    public boolean verificarExistenciaPasta(String caminho) {
+        boolean existencia=false;
+        String pastas[] = caminho.split("/");
+        String pastasRaiz="";
+        
+        for (int i=0; i<pastas.length-1; i++) {
+            pastasRaiz += pastas[i] +"/";
+        }
+        
+        if(pastas[pastas.length - 1].equals("Processado")) {
+            caminhoProcessado = caminho;
+        } else if(pastas[pastas.length - 1].equals("NaoProcessado")) {
+            caminhoNaoProcessado = caminho;    
+        } else {
+            caminhoTeste = caminho;
+        }
+        
+        File pastaC = new File(pastasRaiz);
+        
+        try {
+            for(File pasta : pastaC.listFiles()) {
+                String nomePasta = pasta.getName();
+
+                if(nomePasta.equals(pastas[pastas.length - 1])) {
+                    existencia=true;
+                }
+            }
+            
+            return existencia;
+        } catch (Exception e) {
+            return existencia;
+        }
+    }
+    
+    public void criarPasta(String caminho) {
+        File file = new File(caminho);
+        file.mkdirs();//Cria diretorio do caminho
+    }
+    
+    //Funcao main para teste do arquivo
+    public static void main(String[] args) {
+        ConfiguracaoPastas conf =  new ConfiguracaoPastas();
+        conf.verificarCriarPasta("c:/Teste/Teste/");
+        conf.verificarCriarPasta("c:/Teste/Teste/Processado");
+        conf.verificarCriarPasta("c:/Teste/Teste/NaoProcessado");
+        conf.criarArquivoConfig();
+    }
+}

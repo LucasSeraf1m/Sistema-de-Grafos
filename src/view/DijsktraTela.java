@@ -82,6 +82,11 @@ public class DijsktraTela extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tbl);
 
         btnAdicionar.setText("+");
+        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarActionPerformed(evt);
+            }
+        });
 
         btnProcessar.setText("Processar");
         btnProcessar.addActionListener(new java.awt.event.ActionListener() {
@@ -207,6 +212,11 @@ public class DijsktraTela extends javax.swing.JFrame {
     private void btnProcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnProcessarActionPerformed
+
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        // Lembrete, adicionar na tabela somente se existir o peso
+        // Existe função dentro da classe grafo para calcular caminho minimo: g.caminhoMinimo(ori, des);
+    }//GEN-LAST:event_btnAdicionarActionPerformed
 
     /**
      * @param args the command line arguments
