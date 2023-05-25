@@ -11,7 +11,7 @@ public class Rotas {
     int somaPeso = 0;
     int somaPesoHI;
     
-    public int verificacao(ArrayList<String> al){
+    public void verificacao(ArrayList<String> al){
         try {
             String quantNOH = "";
             String somaPesoH = "";
@@ -73,12 +73,5 @@ public class Rotas {
         } catch (Exception e) {
             System.exit(0);
         }
-        return 0;
-    }
-    public int getPeso(){
-        return somaPeso;
-    }
-    public int getPesoH(){
-        return somaPesoHI;
     }
 }

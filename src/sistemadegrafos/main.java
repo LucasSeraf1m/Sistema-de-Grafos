@@ -60,8 +60,6 @@ public class main {
         }
         
         File rota = new File("C:\\Teste\\rota01.txt");
-        File pastaP = new File("C:\\Teste\\Processado");
-        File pastaNP = new File("C:\\Teste\\NaoProcessado");
         Scanner scanRota = new Scanner(rota);
         
         ArrayList<String> arlRota = new ArrayList<String>();
@@ -69,27 +67,6 @@ public class main {
             arlRota.add(scanRota.nextLine());
         }
         Rotas veriRota = new Rotas();
-        int x = veriRota.verificacao(arlRota);
-        switch(x){
-            case 0: //mover pra pasta de processado;
-                    break;
-            case 1: System.out.println("Numero Totais de Nos Invalidos");
-                    //mover o arquivo pra pasta nao processado
-                    break;
-            case 2: int peso = veriRota.getPeso();
-                    int pesoH = veriRota.getPesoH();
-                    System.out.println("Soma dos pesos difere (Valor do registro Header = " + pesoH + " e soma dos pesos = "+peso);
-                    //mover o arquivo pra pasta nao processado
-                    break;
-            case 3: System.out.println("Header Invalido");
-                    break;
-            case 4: System.out.println("Resumo de Conexoes Invalido");
-                    break;
-            case 5: System.out.println("Numero de Linhas de Conexoes Diferentes");
-                    // mover o arquivo pra pasta nao processado
-                    break;
-            case 6: System.out.println("Numero de Linhas de Pesos Diferentes");
-                    //mover o arquivo pra pasta nao processado
-        }
+        veriRota.verificacao(arlRota);
     }
 }

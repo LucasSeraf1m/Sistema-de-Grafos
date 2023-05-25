@@ -45,6 +45,46 @@ public class criarArquivoRota {
         }
     }
     
+    public void criar(Rota rota, String result) {
+        int numRotaArquivo = pegarUltimaRotaCriada() +1;
+        System.out.println(numRotaArquivo);
+        String numRString = "";
+        if(numRotaArquivo <10) {
+            numRString = "0" + Integer.toString(numRotaArquivo);
+        } else {
+            numRString = Integer.toString(numRotaArquivo);
+        }
+
+        try {
+            FileWriter arquivoRota = new FileWriter("C:\\Teste\\Processado\\rota"+numRString+".txt");
+            
+            arquivoRota.write(rota.getHeader());
+            arquivoRota.write('\n');
+            
+            ArrayList listaRotas = rota.getResumoConexoes();
+            for(Object i: listaRotas) {
+                arquivoRota.write(i.toString());
+                arquivoRota.write('\n');
+            }
+            
+            ArrayList listaPesos = rota.getResumoPesos();
+            for(Object i: listaPesos) {
+                arquivoRota.write(i.toString());
+                arquivoRota.write('\n');
+            }
+            
+            arquivoRota.write(rota.getTrailer());
+            arquivoRota.write('\n');
+            
+            arquivoRota.write(result);
+            arquivoRota.write('\n');
+            
+            arquivoRota.close();
+        } catch(IOException erro) {
+            System.out.println(erro);
+        }
+    }
+    
     // Funções para pegar ultimo arquivo de rotas
     public int pegarUltimaRotaCriada() {
         int ultNumero=0, rota;
@@ -99,7 +139,6 @@ public class criarArquivoRota {
         
         return ultNumero;
     }
-            
            
     // Função para teste
     public void testeRota() {

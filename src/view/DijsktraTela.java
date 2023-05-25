@@ -4,6 +4,17 @@
  */
 package view;
 
+import Control.criarArquivoRota;
+import Model.Rota;
+import java.security.InvalidAlgorithmParameterException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import sistemadegrafos.Grafo;
+
 /**
  *
  * @author lucas
@@ -54,6 +65,12 @@ public class DijsktraTela extends javax.swing.JFrame {
 
         lblCodOrig.setText("Código:");
 
+        txtCodOrig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodOrigActionPerformed(evt);
+            }
+        });
+
         lblCodDest.setText("Código:");
 
         lblKm.setText("KM:");
@@ -70,15 +87,13 @@ public class DijsktraTela extends javax.swing.JFrame {
 
         tbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Código Origem", "Cidade Origem", "Código Destino", "Cidade Destino", "Distância"
             }
         ));
+        tbl.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tbl);
 
         btnAdicionar.setText("+");
@@ -96,6 +111,11 @@ public class DijsktraTela extends javax.swing.JFrame {
         });
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -150,7 +170,7 @@ public class DijsktraTela extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnSalvar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnProcessar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnProcessar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -209,14 +229,111 @@ public class DijsktraTela extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    ArrayList<Integer> nos = new ArrayList<Integer>();
+    ArrayList<String> resumoConexoes = new ArrayList<String>();
+    ArrayList<String> resumoPesos = new ArrayList<String>();
+    List<Integer> caminho = new ArrayList<Integer>();
+    private String resul = "";
+    int somaPesos =0;
+    
+    private String porZero(String valor) {
+        if(Integer.parseInt(valor) <10) {
+            valor = "0"+valor;
+        }
+        return valor;
+    }
+    
+     private String porZeroMil(String valor) {
+        if(Integer.parseInt(valor) <10) {
+            valor = "000"+valor;
+        } else if(Integer.parseInt(valor)<100) {
+            valor = "00"+valor;
+        } else if(Integer.parseInt(valor)< 1000) {
+            valor = "0"+valor;
+        }
+        return valor;
+    }
+    
     private void btnProcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessarActionPerformed
-        // TODO add your handling code here:
+       
+        int contLinhas = tbl.getRowCount();
+        
+        Grafo graf = new Grafo(nos.size());
+        
+        for(int i = 0; i < contLinhas; i++){
+            int codOrigem = Integer.parseInt((String) tbl.getValueAt(i, 0));
+            int codDestino = Integer.parseInt((String) tbl.getValueAt(i, 2));
+            int peso = Integer.parseInt((String) tbl.getValueAt(i, 4));
+            try {
+                graf.criaAresta(codOrigem, codDestino, peso);
+            } catch (InvalidAlgorithmParameterException ex) {
+                Logger.getLogger(DijsktraTela.class.getName()).log(Level.SEVERE, null, ex);
+            }    
+        }
+        int noOrigem = Integer.parseInt(JOptionPane.showInputDialog("No Origem:"));
+        int noDestino = Integer.parseInt(JOptionPane.showInputDialog("No Destino:"));
+        
+        
+        caminho = graf.caminhoMinimo(noOrigem, noDestino); 
+        
+        for(int i=0; i < caminho.size(); i++){       
+            resul += caminho.get(i).toString();
+            if(i != caminho.size()-1){
+                resul += "->";
+            }
+        }
+       JOptionPane.showMessageDialog(null, resul, "Caminho Minimo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnProcessarActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        // Lembrete, adicionar na tabela somente se existir o peso
+      
+        String codOrigem = txtCodOrig.getText();
+        String codDest= txtCodDest.getText();
+        String cidadeOrig = txtCidadeOrig.getText();
+        String cidadeDest = txtCidadeDest.getText();
+        String km = txtKm.getText();
+        
+        //Adiciona as conexos num vetor para salvar no rotas.txt
+        codOrigem = porZero(codOrigem);
+        codDest = porZero(codDest);
+        
+        resumoConexoes.add("01"+codOrigem+"="+codDest);
+        resumoPesos.add("02"+porZero(codOrigem)+";"+porZero(codDest)+"="+porZeroMil(km));
+        
+        DefaultTableModel tblGrafo = (DefaultTableModel) tbl.getModel();
+        Object[] dados = {codOrigem, cidadeOrig, codDest, cidadeDest, km};
+                
+        tblGrafo.addRow(dados);
+        
+        if(!nos.contains(codOrigem)){
+            nos.add(Integer.parseInt(codOrigem));
+        }
+        
+        if(!nos.contains(codDest)){
+            nos.add(Integer.parseInt(codDest));
+        }
+        somaPesos += Integer.parseInt(km);
+        
+        
         // Existe função dentro da classe grafo para calcular caminho minimo: g.caminhoMinimo(ori, des);
     }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void txtCodOrigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodOrigActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodOrigActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        criarArquivoRota arqRota= new criarArquivoRota();
+        Rota rota = new Rota();
+        int quantidade = nos.size();
+        String numNos = porZero(Integer.toString(quantidade));
+        rota.setHeader("00"+ numNos + porZeroMil(Integer.toString(somaPesos)));
+        rota.setResumoConexoes(resumoConexoes);
+        rota.setResumoPesos(resumoPesos);
+        String trailer="09"+porZero(Integer.toString(resumoConexoes.size()))+";"+porZero(Integer.toString(resumoPesos.size()))+";"+porZeroMil(Integer.toString(somaPesos));
+        rota.setTrailer(trailer);   
+        arqRota.criar(rota, resul);
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     /**
      * @param args the command line arguments
