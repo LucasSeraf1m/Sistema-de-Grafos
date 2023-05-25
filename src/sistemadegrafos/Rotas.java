@@ -1,5 +1,12 @@
 package sistemadegrafos;
 
+import Control.criarArquivoRota;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +18,7 @@ public class Rotas {
     int somaPeso = 0;
     int somaPesoHI;
     
-    public int verificacao(ArrayList<String> al){
+    public void verificacao(ArrayList<String> al, File dirRota) throws IOException{
         try {
             String quantNOH = "";
             String somaPesoH = "";
@@ -71,14 +78,26 @@ public class Rotas {
                 throw new Exception("Numero de Linhas de Pesos Diferentes");
             }
         } catch (Exception e) {
+            criarArquivoRota ultRot = new criarArquivoRota();
+            int numRota = ultRot.verificarUltimaRota("C:\\Teste\\NaoProcessado");
+            File rotaNaoProcess = new File("C:\\Teste\\NaoProcessado\\rota.txt");
+            File rotaNum = new File("C:\\Teste\\NaoProcessado\\rota"+numRota+".txt");
+            
+            if(rotaNaoProcess.exists()){
+                rotaNaoProcess.renameTo(rotaNum);
+            }
+            
+            rotaNaoProcess.renameTo(new File("C:\\Teste\\rota" + numRota + ".txt"));
+            
+            Files.move
+            (
+                    FileSystems.getDefault().getPath("C:\\Teste\\", "rota.txt"),
+                    FileSystems.getDefault().getPath("C:\\Teste\\NaoProcessado", "rota.txt"),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+            System.out.println(e);
             System.exit(0);
         }
-        return 0;
     }
-    public int getPeso(){
-        return somaPeso;
-    }
-    public int getPesoH(){
-        return somaPesoHI;
-    }
+    
 }

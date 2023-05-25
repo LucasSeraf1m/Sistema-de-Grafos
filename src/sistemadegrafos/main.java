@@ -4,8 +4,6 @@ package sistemadegrafos;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 import sistemadegrafos.Rotas;
@@ -16,6 +14,32 @@ import sistemadegrafos.Rotas;
 public class main {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
+       
+        Thread rotaAuto = new Thread(new Runnable(){
+            @Override
+            public void run(){
+                try{
+                    while(!Thread.currentThread().isInterrupted()){
+                        System.out.println("Thread On");
+                        File rota = new File("C:\\Teste\\rota.txt");
+                        Scanner scanRota = new Scanner(rota);
+
+                        ArrayList<String> arlRota = new ArrayList<>();
+                        while(scanRota.hasNextLine()){
+                            arlRota.add(scanRota.nextLine());
+                        }
+                        Rotas veriRota = new Rotas();
+                        veriRota.verificacao(arlRota, rota);
+                        Thread.sleep(2000);
+                    }
+                    
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+		}
+            }
+        });
+        
         File caminhoConfig = new File("C:\\Teste\\Configuracao");
         if(!caminhoConfig.exists()){
             System.out.println("Diretorio nao existe");
@@ -58,38 +82,6 @@ public class main {
                 System.out.println("Pasta ja existe");
             }
         }
-        
-        File rota = new File("C:\\Teste\\rota01.txt");
-        File pastaP = new File("C:\\Teste\\Processado");
-        File pastaNP = new File("C:\\Teste\\NaoProcessado");
-        Scanner scanRota = new Scanner(rota);
-        
-        ArrayList<String> arlRota = new ArrayList<String>();
-        while(scanRota.hasNextLine()){
-            arlRota.add(scanRota.nextLine());
-        }
-        Rotas veriRota = new Rotas();
-        int x = veriRota.verificacao(arlRota);
-        switch(x){
-            case 0: //mover pra pasta de processado;
-                    break;
-            case 1: System.out.println("Numero Totais de Nos Invalidos");
-                    //mover o arquivo pra pasta nao processado
-                    break;
-            case 2: int peso = veriRota.getPeso();
-                    int pesoH = veriRota.getPesoH();
-                    System.out.println("Soma dos pesos difere (Valor do registro Header = " + pesoH + " e soma dos pesos = "+peso);
-                    //mover o arquivo pra pasta nao processado
-                    break;
-            case 3: System.out.println("Header Invalido");
-                    break;
-            case 4: System.out.println("Resumo de Conexoes Invalido");
-                    break;
-            case 5: System.out.println("Numero de Linhas de Conexoes Diferentes");
-                    // mover o arquivo pra pasta nao processado
-                    break;
-            case 6: System.out.println("Numero de Linhas de Pesos Diferentes");
-                    //mover o arquivo pra pasta nao processado
-        }
+        rotaAuto.start();
     }
 }
