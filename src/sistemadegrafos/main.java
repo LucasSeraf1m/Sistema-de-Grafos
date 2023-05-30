@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import sistemadegrafos.Rotas;
+import view.ConfigTela;
+import view.DijsktraTela;
 /**
  *
  * @author lucas
@@ -76,16 +78,19 @@ public class main {
                     System.exit(0);
                 }
         }
-        for(int i = 0; i < arlLinhas.size(); i++){
-            String caminho[] = arlLinhas.get(i).split("=");
-            File pastas = new File(caminho[1]);
-            boolean pasta = pastas.mkdirs();
-            if(pasta){
-                System.out.println("Pasta Criada");
+        if(arlLinhas.size() == 2){
+            ConfigTela telaConf = new ConfigTela(arquivo);
+            telaConf.setVisible(true);
+        }else{
+            String rotaA[] = arlLinhas.get(2).split("=");
+            if(rotaA[1] == "true"){
+                rotaAuto.start();
             }else{
-                System.out.println("Pasta ja existe");
+                DijsktraTela tela = new DijsktraTela();
+                tela.setVisible(true);
             }
         }
-        rotaAuto.start();
+        
+        
     }
 }

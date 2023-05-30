@@ -4,17 +4,24 @@
  */
 package view;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author lucas
  */
 public class ConfigTela extends javax.swing.JFrame {
 
-    /**
-     * Creates new form UserInterface
-     */
-    public ConfigTela() {
+    File config;
+    public ConfigTela(File config) {
         initComponents();
+        this.config = config;
     }
 
     /**
@@ -138,7 +145,34 @@ public class ConfigTela extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSucessoActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
+        boolean rotaAut = checkBox.isSelected();
+        try{
+            FileWriter confAtt = new FileWriter(config, true);
+            if(rotaAut){
+                confAtt.write("\nRotaAutomatica=true");
+            }else{
+                confAtt.write("\nRotaAutomatica=false");
+            }
+            confAtt.close();
+            Scanner scan = new Scanner(config);
+            ArrayList<String> arlLinhas = new ArrayList<String>();
+            while(scan.hasNextLine()){
+            arlLinhas.add(scan.nextLine());
+            }
+            scan.close();
+            for(int i = 0; i < arlLinhas.size(); i++){
+                String caminho[] = arlLinhas.get(i).split("=");
+                File pastas = new File(caminho[1]);
+                boolean pasta = pastas.mkdirs();
+                if(pasta){
+                    System.out.println("Pasta Criada");
+                }else{
+                    System.out.println("Pasta ja existe");
+                } 
+            }
+            System.exit(0);
+        } catch (IOException ex) {
+        }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     /**
@@ -172,7 +206,6 @@ public class ConfigTela extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConfigTela().setVisible(true);
             }
         });
     }
