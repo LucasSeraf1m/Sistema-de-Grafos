@@ -2,10 +2,11 @@ package sistemadegrafos;
 
 import Control.criarArquivoRota;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.List;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
@@ -17,8 +18,9 @@ public class Rotas {
     
     int somaPeso = 0;
     int somaPesoHI;
+    criarArquivoRota ultRot = new criarArquivoRota();
     
-    public void verificacao(ArrayList<String> al) throws IOException{
+    public void verificacao(ArrayList<String> al, File rota) throws IOException{
         try {
             String quantNOH = "";
             String somaPesoH = "";
@@ -77,9 +79,49 @@ public class Rotas {
             if(countLinhaP != countLinhaPT){
                 throw new Exception("Numero de Linhas de Pesos Diferentes");
             }
+            Grafo graf = new Grafo(Integer.parseInt(quantNOH));
+            for(int i = 0; i < al.size(); i++){
+                String linha = al.get(i);
+                if(linha.startsWith("02")){
+                   int noOr = Integer.parseInt(linha.substring(2, 4));
+                   int noDe = Integer.parseInt(linha.substring(5, 7));
+                   int peso = Integer.parseInt(linha.substring(8));
+                   graf.criaAresta(noOr, noDe, peso);
+                }
+            }
+            List<Integer> caminho = new ArrayList<Integer>();
+            
+            caminho = graf.caminhoMinimo(Integer.parseInt(arlNos.get(0)), Integer.parseInt(arlNos.get(arlNos.size()-1)));
+            String resul = "";
+            for(int j=0; j < caminho.size(); j++){       
+                resul += caminho.get(j).toString();
+                if(j != caminho.size()-1){
+                    resul += "->";
+                }
+            }
+            FileWriter rotaC = new FileWriter(rota, true);
+            rotaC.write(resul);
+            rotaC.close();
+            
+            int numRota = ultRot.pegarUltimaRotaCriadaProcessado();
+            File rotaProcess = new File("C:\\Teste\\Processado\\rota.txt");
+            File rotaNum = new File("C:\\Teste\\NaoProcessado\\rota"+numRota+".txt");
+            
+            if(rotaProcess.exists()){
+                rotaProcess.renameTo(rotaNum);
+            }
+            
+            rotaProcess.renameTo(new File("C:\\Teste\\rota" + numRota + ".txt"));
+            
+            Files.move
+            (
+                    FileSystems.getDefault().getPath("C:\\Teste\\", "rota.txt"),
+                    FileSystems.getDefault().getPath("C:\\Teste\\Processado", "rota.txt"),
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+            
         } catch (Exception e) {
-            criarArquivoRota ultRot = new criarArquivoRota();
-            int numRota = ultRot.verificarUltimaRota("C:\\Teste\\NaoProcessado");
+            int numRota = ultRot.pegarUltimaRotaCriadaNaoProcessado();
             File rotaNaoProcess = new File("C:\\Teste\\NaoProcessado\\rota.txt");
             File rotaNum = new File("C:\\Teste\\NaoProcessado\\rota"+numRota+".txt");
             
@@ -96,7 +138,6 @@ public class Rotas {
                     StandardCopyOption.REPLACE_EXISTING
             );
             System.out.println(e);
-            System.exit(0);
         }
     }
 }

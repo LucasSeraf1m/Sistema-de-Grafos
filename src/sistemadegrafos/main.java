@@ -20,16 +20,20 @@ public class main {
             public void run(){
                 try{
                     while(!Thread.currentThread().isInterrupted()){
-                        System.out.println("Thread On");
+                        System.out.println("Procurando rota");
                         File rota = new File("C:\\Teste\\rota.txt");
-                        Scanner scanRota = new Scanner(rota);
-
-                        ArrayList<String> arlRota = new ArrayList<>();
-                        while(scanRota.hasNextLine()){
-                            arlRota.add(scanRota.nextLine());
+                        if(rota.exists()){
+                            System.out.println("Rota encontrada");
+                            Scanner scanRota = new Scanner(rota);
+                            ArrayList<String> arlRota = new ArrayList<>();
+                            while(scanRota.hasNextLine()){
+                                arlRota.add(scanRota.nextLine());
+                            }
+                            scanRota.close();
+                            Rotas veriRota = new Rotas();
+                            veriRota.verificacao(arlRota, rota);
                         }
-                        Rotas veriRota = new Rotas();
-                        veriRota.verificacao(arlRota);
+                        
                         Thread.sleep(2000);
                     }
                     

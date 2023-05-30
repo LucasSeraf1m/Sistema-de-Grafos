@@ -298,18 +298,18 @@ public class DijsktraTela extends javax.swing.JFrame {
         codDest = porZero(codDest);
         
         resumoConexoes.add("01"+codOrigem+"="+codDest);
-        resumoPesos.add("02"+porZero(codOrigem)+";"+porZero(codDest)+"="+porZeroMil(km));
+        resumoPesos.add("02"+codOrigem+";"+codDest+"="+porZeroMil(km));
         
         DefaultTableModel tblGrafo = (DefaultTableModel) tbl.getModel();
         Object[] dados = {codOrigem, cidadeOrig, codDest, cidadeDest, km};
                 
         tblGrafo.addRow(dados);
         
-        if(!nos.contains(codOrigem)){
+        if(!nos.contains(Integer.parseInt(codOrigem))){
             nos.add(Integer.parseInt(codOrigem));
         }
         
-        if(!nos.contains(codDest)){
+        if(!nos.contains(Integer.parseInt(codDest))){
             nos.add(Integer.parseInt(codDest));
         }
         somaPesos += Integer.parseInt(km);

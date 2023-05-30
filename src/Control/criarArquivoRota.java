@@ -131,9 +131,11 @@ public class criarArquivoRota {
                 nome = nome.replace(".", "");
                 nome = nome.replace("txt", "");
                 nome = nome.replace("rota", "");
-                if(ultNumero < Integer.parseInt(nome)) {
-                    ultNumero = Integer.parseInt(nome);
-                }  
+                if(nome == ""){
+                    ultNumero = 2;
+                }else if(ultNumero < Integer.parseInt(nome)) {
+                    ultNumero = Integer.parseInt(nome);     
+                }
             } 
         }
         
