@@ -277,7 +277,6 @@ public class DijsktraTela extends javax.swing.JFrame {
     }
     
     private void btnProcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessarActionPerformed
-       //assa
         int contLinhas = tbl.getRowCount();
         
         Grafo graf = new Grafo(nos.size());

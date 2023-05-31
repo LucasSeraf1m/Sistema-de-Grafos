@@ -1,6 +1,8 @@
 
 package sistemadegrafos;
 
+import Control.ConfiguracaoPastas;
+import Model.Config;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,7 +18,16 @@ import view.DijsktraTela;
 public class main {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-       
+        ConfiguracaoPastas confPasta = new ConfiguracaoPastas();
+        confPasta.criarPastaPadrao();
+        if(confPasta.verificarExistenciaPasta("c:/Teste/Configuracao/config.txt")) {
+            System.out.println("Existe");
+        }
+        
+        
+//        if(arlLinhas.size() == 2) {
+//            
+//        }
         Thread rotaAuto = new Thread(new Runnable(){
             @Override
             public void run(){
@@ -83,14 +94,14 @@ public class main {
             telaConf.setVisible(true);
         }else{
             String rotaA[] = arlLinhas.get(2).split("=");
-            if(rotaA[1] == "true"){
+            System.out.println(rotaA[1]);
+            if(rotaA[1].equals("true")){
                 rotaAuto.start();
-            }else{
+            }else {
+                System.out.println();
                 DijsktraTela tela = new DijsktraTela();
                 tela.setVisible(true);
             }
         }
-        
-        
     }
 }
