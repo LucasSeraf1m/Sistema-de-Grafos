@@ -20,7 +20,7 @@ public class Rotas {
     int somaPesoHI;
     criarArquivoRota ultRot = new criarArquivoRota();
     
-    public void verificacao(ArrayList<String> al, File rota) throws IOException{
+    public void verificacao(ArrayList<String> al, File rota, boolean moverArquivo) throws IOException{
         try {
             String quantNOH = "";
             String somaPesoH = "";
@@ -99,26 +99,28 @@ public class Rotas {
                     resul += "->";
                 }
             }
-            FileWriter rotaC = new FileWriter(rota, true);
-            rotaC.write(resul);
-            rotaC.close();
-            
-            int numRota = ultRot.pegarUltimaRotaCriadaProcessado();
-            File rotaProcess = new File("C:\\Teste\\Processado\\rota.txt");
-            File rotaNum = new File("C:\\Teste\\NaoProcessado\\rota"+numRota+".txt");
-            
-            if(rotaProcess.exists()){
-                rotaProcess.renameTo(rotaNum);
-            }
-            
-            rotaProcess.renameTo(new File("C:\\Teste\\rota" + numRota + ".txt"));
-            
-            Files.move
-            (
-                    FileSystems.getDefault().getPath("C:\\Teste\\", "rota.txt"),
-                    FileSystems.getDefault().getPath("C:\\Teste\\Processado", "rota.txt"),
-                    StandardCopyOption.REPLACE_EXISTING
-            );
+           if(moverArquivo) {
+                FileWriter rotaC = new FileWriter(rota, true);
+                rotaC.write(resul);
+                rotaC.close();
+
+                int numRota = ultRot.pegarUltimaRotaCriadaProcessado();
+                File rotaProcess = new File("C:\\Teste\\Processado\\rota.txt");
+                File rotaNum = new File("C:\\Teste\\NaoProcessado\\rota"+numRota+".txt");
+
+                if(rotaProcess.exists()){
+                    rotaProcess.renameTo(rotaNum);
+                }
+
+                rotaProcess.renameTo(new File("C:\\Teste\\rota" + numRota + ".txt"));
+
+                Files.move
+                (
+                        FileSystems.getDefault().getPath("C:\\Teste\\", "rota.txt"),
+                        FileSystems.getDefault().getPath("C:\\Teste\\Processado", "rota.txt"),
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+           }
             
         } catch (Exception e) {
             int numRota = ultRot.pegarUltimaRotaCriadaNaoProcessado();
