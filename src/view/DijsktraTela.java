@@ -320,7 +320,7 @@ public class DijsktraTela extends javax.swing.JFrame {
         if(!nos.contains(Integer.parseInt(codOrigem))){
             nos.add(Integer.parseInt(codOrigem));
         }
-        
+        //funciona deus
         if(!nos.contains(Integer.parseInt(codDest))){
             nos.add(Integer.parseInt(codDest));
         }
