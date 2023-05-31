@@ -24,12 +24,8 @@ public class main {
             confPasta.criarPastaPadrao();
             ConfigTela tela = new ConfigTela();
             tela.setVisible(true);
-        } else if(confPasta.verificarExistenciaPasta("c:/Teste/Configuracao/config.txt")) {
-            Menu telaMenu=new Menu();
-            telaMenu.setVisible(true);
-        
-            System.out.println("a");
-        
+        }
+    
         
 //        if(arlLinhas.size() == 2) {
 //            
@@ -50,7 +46,7 @@ public class main {
                             }
                             scanRota.close();
                             Rotas veriRota = new Rotas();
-                            veriRota.verificacao(arlRota, rota);
+                            veriRota.verificacao(arlRota, rota, true);
                         }
                         
                         Thread.sleep(2000);
@@ -75,7 +71,7 @@ public class main {
         }
         Scanner scan = new Scanner(arquivo);
         if(arquivo.length() == 0){
-            System.out.println("Arquivo em branco");
+            System.out.println("Config.txt em branco");
             System.exit(0);
         }
         
@@ -84,26 +80,27 @@ public class main {
             arlLinhas.add(scan.nextLine());
         }
 
-        if(arlLinhas.size() == 1){
+        for(int i = 0; i < arlLinhas.size(); i++){
+            String ver = "";
+            if(arlLinhas.get(i).startsWith("Processado")){
+                ver = arlLinhas.get(i).substring(10,11);
+            }else if(arlLinhas.get(i).startsWith("NaoProcessado")){
+                ver = arlLinhas.get(i).substring(13,14);
+            }
+            if(ver.equals("@")){
+                System.out.println("Arquivo Incorreto");
+                System.exit(0);
+            }
+        }
+        if(arlLinhas.size() < 3){
             System.out.println("Arquivo Incompleto");
             System.exit(0);
-        }
-
-        for(int i = 0; i < arlLinhas.size(); i++){
-            if(arlLinhas.get(i).contains("@")){
-                    System.out.println("Arquivo Incorreto");
-                    System.exit(0);
-                }
-        }
-        if(arlLinhas.size() == 2){
-            ConfigTela telaConf = new ConfigTela();
-            telaConf.setConfig(arquivo);
-            telaConf.setVisible(true);
         }else{
             String rotaA[] = arlLinhas.get(2).split("=");
-            System.out.println(rotaA[1]);
             if(rotaA[1].equals("true")){
                 rotaAuto.start();
+                //Menu telaMenu=new Menu();
+                //telaMenu.setVisible(true);
             }else {
                 System.out.println();
                 DijsktraTela tela = new DijsktraTela();
@@ -112,4 +109,3 @@ public class main {
         }
         }
     }
-}

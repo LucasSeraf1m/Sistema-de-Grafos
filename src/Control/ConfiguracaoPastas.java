@@ -15,15 +15,12 @@ public class ConfiguracaoPastas {
     
     public void criarArquivoConfig() {
         String caminhoConf = caminhoTeste + "/Configuracao";
-        System.out.println(caminhoTeste);
-        System.out.println(caminhoNaoProcessado);
-        System.out.println(caminhoProcessado);
         verificarCriarPasta(caminhoConf);
         try {
             FileWriter conf = new FileWriter(caminhoConf+"/config.txt");
             conf.write("Processado="+caminhoProcessado);
             conf.write("\n");
-            conf.write("Processado="+caminhoNaoProcessado);
+            conf.write("NaoProcessado="+caminhoNaoProcessado);
             conf.close();
         } catch (IOException ex) {
             Logger.getLogger(ConfiguracaoPastas.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,6 +101,5 @@ public class ConfiguracaoPastas {
         conf.verificarCriarPasta("c:/Teste/Teste/Processado");
         conf.verificarCriarPasta("c:/Teste/Teste/NaoProcessado");
         conf.criarArquivoConfig();
-        System.out.println("Rodou");
     }
 }
