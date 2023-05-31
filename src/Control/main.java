@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class main {
     
     public static int lerEstacao(final String tipoNo, final Scanner in) {
-		
+
 		while (true) {
 			System.out.println(tipoNo+":");
 			String linha = in.nextLine().trim();

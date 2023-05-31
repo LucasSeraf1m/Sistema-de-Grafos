@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 public class ConfiguracaoPastas {
     private String caminhoTeste="";
     private String caminhoProcessado="";
@@ -39,7 +41,7 @@ public class ConfiguracaoPastas {
     }
     
     //Criar pasta em outro lugar com mesma estrutura
-    public void criarPastaPadraoB(String caminho) {
+    public void criarPastaPadrao(String caminho) {
 //        Verifica se não existe pasta criada
         verificarCriarPasta(caminho + "Teste\\");
         verificarCriarPasta(caminho + "Teste\\Processado");
@@ -82,6 +84,7 @@ public class ConfiguracaoPastas {
                     existencia=true;
                 }
             }
+//            JOptionPane.sho
             
             return existencia;
         } catch (Exception e) {
@@ -101,5 +104,6 @@ public class ConfiguracaoPastas {
         conf.verificarCriarPasta("c:/Teste/Teste/Processado");
         conf.verificarCriarPasta("c:/Teste/Teste/NaoProcessado");
         conf.criarArquivoConfig();
+        System.out.println("Rodou");
     }
 }
