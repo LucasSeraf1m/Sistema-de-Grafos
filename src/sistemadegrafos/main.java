@@ -93,6 +93,7 @@ public class main {
             }
         }
         if(arlLinhas.size() < 3){
+            //commmit
             System.out.println("Arquivo Incompleto");
             System.exit(0);
         }else{
