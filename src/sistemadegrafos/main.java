@@ -8,9 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import sistemadegrafos.Rotas;
 import view.ConfigTela;
 import view.DijsktraTela;
+import view.Menu;
 /**
  *
  * @author lucas
@@ -20,9 +20,15 @@ public class main {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         ConfiguracaoPastas confPasta = new ConfiguracaoPastas();
         confPasta.criarPastaPadrao();
-        if(confPasta.verificarExistenciaPasta("c:/Teste/Configuracao/config.txt")) {
-            System.out.println("Existe");
-        }
+        if(!confPasta.verificarExistenciaPasta("c:/Teste/Configuracao/config.txt")) {
+            confPasta.criarPastaPadrao();
+            ConfigTela tela = new ConfigTela();
+            tela.setVisible(true);
+        } else if(confPasta.verificarExistenciaPasta("c:/Teste/Configuracao/config.txt")) {
+            Menu telaMenu=new Menu();
+            telaMenu.setVisible(true);
+        
+            System.out.println("a");
         
         
 //        if(arlLinhas.size() == 2) {
@@ -90,7 +96,8 @@ public class main {
                 }
         }
         if(arlLinhas.size() == 2){
-            ConfigTela telaConf = new ConfigTela(arquivo);
+            ConfigTela telaConf = new ConfigTela();
+            telaConf.setConfig(arquivo);
             telaConf.setVisible(true);
         }else{
             String rotaA[] = arlLinhas.get(2).split("=");
@@ -102,6 +109,7 @@ public class main {
                 DijsktraTela tela = new DijsktraTela();
                 tela.setVisible(true);
             }
+        }
         }
     }
 }

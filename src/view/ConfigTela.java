@@ -4,6 +4,7 @@
  */
 package view;
 
+import Control.ConfiguracaoPastas;
 import Model.Config;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,10 +18,13 @@ import java.util.Scanner;
  */
 public class ConfigTela extends javax.swing.JFrame {
 
-    File config;
-    public ConfigTela(File config) {
-        initComponents();
+    private File config;
+    public void setConfig(File config) {
         this.config = config;
+    }
+    
+    public ConfigTela() {
+        initComponents();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -120,30 +124,38 @@ public class ConfigTela extends javax.swing.JFrame {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         System.out.println(Config.getLinhaNaoProcessado());
         boolean rotaAut = checkBox.isSelected();
+        
+        Config.setPastaPrincipal(txtPasta.getText()); 
+        Config.setLinhaProcessado(txtSucesso.getText());
+        Config.setLinhaNaoProcessado(txtErro.getText());
+        
+        ConfiguracaoPastas confPastas = new ConfiguracaoPastas();
+        confPastas.criarArquivoConfig();
+        
         try{
-            FileWriter confAtt = new FileWriter(config, true);
+            FileWriter confAtt = new FileWriter("C:\\Teste\\Configuracao\\config.txt", true);
             if(rotaAut){
                 confAtt.write("\nRotaAutomatica=true");
             }else{
                 confAtt.write("\nRotaAutomatica=false");
             }
             confAtt.close();
-            Scanner scan = new Scanner(config);
+            Scanner scan = new Scanner("C:\\Teste\\Configuracao\\config.txt");
             ArrayList<String> arlLinhas = new ArrayList<String>();
             while(scan.hasNextLine()){
             arlLinhas.add(scan.nextLine());
             }
             scan.close();
-            for(int i = 0; i < arlLinhas.size(); i++){
-                String caminho[] = arlLinhas.get(i).split("=");
-                File pastas = new File(caminho[1]);
-                boolean pasta = pastas.mkdirs();
-                if(pasta){
-                    System.out.println("Pasta Criada");
-                }else{
-                    System.out.println("Pasta ja existe");
-                } 
-            }
+//            for(int i = 0; i < arlLinhas.size(); i++){
+//                String caminho[] = arlLinhas.get(i).split("=");
+//                File pastas = new File(caminho[1]);
+//                boolean pasta = pastas.mkdirs();
+//                if(pasta){
+//                    System.out.println("Pasta Criada");
+//                }else{
+//                    System.out.println("Pasta ja existe");
+//                } 
+//            }
             
             
             System.exit(0);
@@ -183,6 +195,9 @@ public class ConfigTela extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                ConfigTela telaConf = new ConfigTela();
+
+            telaConf.setVisible(true);
             }
         });
     }

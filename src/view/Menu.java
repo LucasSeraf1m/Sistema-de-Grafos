@@ -77,7 +77,8 @@ public class Menu extends javax.swing.JFrame {
 
     private void btnConfiguracaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiguracaoActionPerformed
         File arquivo = new File("C:\\Teste\\Configuracao\\config.txt");
-        ConfigTela telaConf = new ConfigTela(arquivo);
+        ConfigTela telaConf = new ConfigTela();
+        telaConf.setConfig(arquivo);
         telaConf.setVisible(true);
     }//GEN-LAST:event_btnConfiguracaoActionPerformed
 

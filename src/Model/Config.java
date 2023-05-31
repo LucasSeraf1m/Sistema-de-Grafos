@@ -2,10 +2,19 @@
 package Model;
 
 public class Config {
+    private static String pastaPrincipal; 
     private static String linhaProcessado; 
     private static String linhaNaoProcessado; 
     private static String linhaRotaAutomaica;
 
+    public static String getPastaPrincipal() {
+        return pastaPrincipal;
+    }
+
+    public static void setPastaPrincipal(String pastaPrincipal) {
+        Config.pastaPrincipal = pastaPrincipal;
+    }
+    
     public static String getLinhaProcessado() {
         return linhaProcessado;
     }

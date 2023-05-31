@@ -1,17 +1,17 @@
 
 package Control;
 
+import Model.Config;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 public class ConfiguracaoPastas {
-    private String caminhoTeste="";
-    private String caminhoProcessado="";
-    private String caminhoNaoProcessado="";
+    private String caminhoTeste = "C:/Teste/";
+    private String caminhoProcessado= Config.getLinhaProcessado();
+    private String caminhoNaoProcessado=Config.getLinhaNaoProcessado();
     
     public void criarArquivoConfig() {
         String caminhoConf = caminhoTeste + "/Configuracao";
@@ -24,7 +24,6 @@ public class ConfiguracaoPastas {
             conf.write("Processado="+caminhoProcessado);
             conf.write("\n");
             conf.write("Processado="+caminhoNaoProcessado);
-            conf.write("\n");
             conf.close();
         } catch (IOException ex) {
             Logger.getLogger(ConfiguracaoPastas.class.getName()).log(Level.SEVERE, null, ex);
@@ -35,7 +34,8 @@ public class ConfiguracaoPastas {
     //Cria a pasta c:\teste\...
     public void criarPastaPadrao() {
         //Verifica se não existe pasta criada
-        verificarCriarPasta("c:\\Teste\\");
+        verificarCriarPasta("c:\\Teste\\Teste");
+        verificarCriarPasta("c:\\Teste\\Configuracao");
         verificarCriarPasta("c:\\Teste\\NaoProcessado");
         verificarCriarPasta("c:\\Teste\\Processado");
     }
