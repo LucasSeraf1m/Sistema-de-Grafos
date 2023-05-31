@@ -131,6 +131,8 @@ public class ConfigTela extends javax.swing.JFrame {
         
         ConfiguracaoPastas confPastas = new ConfiguracaoPastas();
         confPastas.criarArquivoConfig();
+        confPastas.verificarCriarPasta(Config.getLinhaProcessado());
+        confPastas.verificarCriarPasta(Config.getLinhaNaoProcessado());
         
         try{
             FileWriter confAtt = new FileWriter("C:\\Teste\\Configuracao\\config.txt", true);
@@ -157,8 +159,9 @@ public class ConfigTela extends javax.swing.JFrame {
 //                } 
 //            }
             
+            Menu telaMenu = new Menu();
+            telaMenu.setVisible(true);
             
-            System.exit(0);
         } catch (IOException ex) {
             System.out.println("Erro na tela ConfigTela: "+ ex);
         }
