@@ -271,7 +271,7 @@ public class DijsktraTela extends javax.swing.JFrame {
         int contLinhas = tbl.getRowCount();
         
         Grafo graf = new Grafo(nos.size());
-        
+        //adfffffffffffffffffffffffffffffffffffffffffffff
         for(int i = 0; i < contLinhas; i++){
             int codOrigem = Integer.parseInt((String) tbl.getValueAt(i, 0));
             int codDestino = Integer.parseInt((String) tbl.getValueAt(i, 2));
