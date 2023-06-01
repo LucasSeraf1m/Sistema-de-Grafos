@@ -7,9 +7,11 @@ package view;
 import Control.criarArquivoRota;
 import Model.Rota;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.security.InvalidAlgorithmParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -62,8 +64,6 @@ public class DijsktraTela extends javax.swing.JFrame {
         btnSalvar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanel1.setToolTipText("");
 
         lblBuscar.setText("Buscar:");
 
@@ -178,7 +178,7 @@ public class DijsktraTela extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -270,8 +270,8 @@ public class DijsktraTela extends javax.swing.JFrame {
     private void btnProcessarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessarActionPerformed
         int contLinhas = tbl.getRowCount();
         
-        Grafo graf = new Grafo(nos.size());
-        //adfffffffffffffffffffffffffffffffffffffffffffff
+        Grafo graf = new Grafo(999);
+
         for(int i = 0; i < contLinhas; i++){
             int codOrigem = Integer.parseInt((String) tbl.getValueAt(i, 0));
             int codDestino = Integer.parseInt((String) tbl.getValueAt(i, 2));
@@ -282,6 +282,7 @@ public class DijsktraTela extends javax.swing.JFrame {
                 Logger.getLogger(DijsktraTela.class.getName()).log(Level.SEVERE, null, ex);
             }    
         }
+        
         int noOrigem = Integer.parseInt(JOptionPane.showInputDialog("No Origem:"));
         int noDestino = Integer.parseInt(JOptionPane.showInputDialog("No Destino:"));
         
@@ -348,7 +349,55 @@ public class DijsktraTela extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String strinBuscar = txtBuscar.getText();
+        
+        File rota = new File(strinBuscar);
+            if(rota.exists()){
+            try {
+                System.out.println("Rota encontrada");
+                Scanner scanRota = new Scanner(rota);
+                ArrayList<String> arlRota = new ArrayList<>();
+                DefaultTableModel tblGrafo = (DefaultTableModel) tbl.getModel();
+                while(scanRota.hasNextLine()){
+                    
+                   
+                    //                    tblGrafo.addRow(dados);
+                    //                    arlRota.add(scanRota.nextLine());
+                    
+                    
+                    String linha = scanRota.nextLine();
+                    //               Le as linhas dos nós de origem e destino e as separa
+                    String verticesEPeso[] = linha.split("="); // Separa o nó de origem e destino dos pesos
+                    int validacao = verticesEPeso[0].charAt(1);//Tratamento para pegar apenas o numero indicador dos blocos conexões
+                    //Tratamento para pegar apenas o numero indicador dos blocos conexões
+                    if(validacao == 50){//Se for o número 1 então...
+                        // Armazena os nos de origem e destino em variaveis
+                        String conexao[] = verticesEPeso[0].split(";"); // Retorna a rota origem sem o indice
+                        conexao[0] = conexao[0].substring(1); //Apaga a primeira casa do string, nesse caso o 0
+                        conexao[0] = conexao[0].substring(1); //Apaga novamente a primeira casa do string, nesse caso o 1 ou 2
+                        int noOrigem = Integer.parseInt(conexao[0]);
+                        int noDestino = Integer.parseInt(conexao[1]);
+                        int peso = Integer.parseInt(verticesEPeso[1]);
+                         somaPesos += peso;
+                        
+                        if(!nos.contains(noOrigem)){
+                            nos.add(noOrigem);
+                        }
 
+                        if(!nos.contains(noDestino)){
+                            nos.add(noDestino);
+                         }
+                          resumoConexoes.add("01"+noOrigem+"="+noDestino);
+                            resumoPesos.add("02"+noOrigem+";"+noDestino+"="+porZeroMil(Integer.toString(peso)));
+                        Object[] dadosBusca = {Integer.toString(noOrigem), "Campo vazio", Integer.toString(noDestino), "Campo vazio", Integer.toString(peso)};
+                        tblGrafo.addRow(dadosBusca);
+                    }
+                }
+                scanRota.close(); 
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(DijsktraTela.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
     }//GEN-LAST:event_btnBuscarActionPerformed
 
